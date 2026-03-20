@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11+ Quest: Elite Brain Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Quicksand', sans-serif; background-color: #f0f9ff; }
+        h1, h2, .font-title { font-family: 'Fredoka One', cursive; }
+        .card-hover:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .correct-pulse { animation: pulse 0.5s infinite; }
+        svg { max-width: 100%; height: auto; display: block; margin: auto; }
+        .nvr-svg-container svg { width: 70px; height: 70px; }
+        .option-svg svg { width: 55px; height: 55px; }
+        .progress-bar-fill { transition: width 0.5s ease-in-out; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header id="app-header" class="bg-indigo-700 text-white p-4 shadow-lg sticky top-0 z-50 hidden">
+        <div class="container mx-auto flex justify-between items-center">
+            <button onclick="goHome()" class="text-xl md:text-3xl tracking-wider uppercase hover:opacity-80 transition">11+ Quest Elite</button>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:block bg-indigo-900 px-3 py-1 rounded-full text-xs">
+                    Hero: <span id="hero-name-display" class="font-bold">...</span>
+                </div>
+                <div class="bg-indigo-900 px-3 py-1 rounded-full text-xs md:text-sm">
+                    Brain Power: <span id="score">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-4 max-w-4xl">
+        
+        <!-- AUTH/LOGIN SCREEN -->
+        <div id="auth-screen" class="mt-20 flex flex-col items-center">
+            <div class="bg-white p-10 rounded-3xl shadow-2xl text-center border-b-8 border-indigo-200 max-w-md w-full">
+                <div class="text-7xl mb-6">🚀</div>
+                <h1 class="text-3xl text-indigo-900 mb-6">Brain Hero Login</h1>
+                <input type="text" id="username-input" placeholder="Enter your Hero Name..." class="w-full p-4 rounded-2xl border-2 border-gray-100 focus:border-indigo-400 outline-none mb-6 text-center text-xl font-bold">
+                <button onclick="handleLogin()" id="login-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl text-xl shadow-lg transition transform active:scale-95">
+                    START ADVENTURE
+                </button>
+                <div id="auth-error-msg" class="hidden mt-4 p-3 bg-red-100 text-red-700 rounded-xl text-sm italic">
+                    Firebase Auth Error: Please ensure 'Anonymous' sign-in is enabled in your Firebase Console.
+                </div>
+                <p class="text-gray-400 text-sm mt-6">Your progress will be saved to the Brain Academy Cloud.</p>
+            </div>
+        </div>
+
+        <!-- HOME SCREEN -->
+        <div id="home-screen" class="mt-8 hidden">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl text-indigo-900 mb-2">The Challenge Academy</h2>
+                <p class="text-gray-600 italic">Complete quests to level up your ranks!</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <button onclick="startQuest('Verbal Reasoning')" class="bg-white p-6 rounded-3xl shadow-xl border-b-8 border-purple-200 hover:border-purple-400 transform transition hover:-translate-y-2 group">
+                    <div class="flex justify-between items-start">
+                        <div class="text-5xl mb-4 group-hover:scale-110 transition">🔠</div>
+                        <span id="vr-rank-ui" class="text-[10px] font-bold bg-purple-100 text-purple-600 px-2 py-1 rounded uppercase">LVL 1</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-purple-700 mb-2">Verbal</h3>
+                    <p class="text-gray-500 text-sm italic">Vocabulary, codes & scholarship logic.</p>
+                </button>
+
+                <button onclick="startQuest('Non-Verbal Reasoning')" class="bg-white p-6 rounded-3xl shadow-xl border-b-8 border-blue-200 hover:border-blue-400 transform transition hover:-translate-y-2 group">
+                    <div class="flex justify-between items-start">
+                        <div class="text-5xl mb-4 group-hover:scale-110 transition">📐</div>
+                        <span id="nvr-rank-ui" class="text-[10px] font-bold bg-blue-100 text-blue-600 px-2 py-1 rounded uppercase">LVL 1</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-blue-700 mb-2">Non-Verbal</h3>
+                    <p class="text-gray-500 text-sm italic">Patterns, rotations & matrices.</p>
+                </button>
+
+                <button onclick="startQuest('Maths')" class="bg-white p-6 rounded-3xl shadow-xl border-b-8 border-green-200 hover:border-green-400 transform transition hover:-translate-y-2 group">
+                    <div class="flex justify-between items-start">
+                        <div class="text-5xl mb-4 group-hover:scale-110 transition">🔢</div>
+                        <span id="maths-rank-ui" class="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-1 rounded uppercase">LVL 1</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-700 mb-2">Maths</h3>
+                    <p class="text-gray-500 text-sm italic">Algebra & multi-step problems.</p>
+                </button>
+            </div>
+
+            <!-- Dashboard -->
+            <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-indigo-500">
+                <h3 class="text-2xl text-indigo-900 mb-6 flex items-center gap-2">
+                    <span>📊</span> Your Academy Report
+                </h3>
+                <div id="stats-dashboard" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 p-4 rounded-2xl">
+                        <div class="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Total Score</div>
+                        <div id="dash-total-score" class="text-3xl font-bold text-indigo-600">0</div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-2xl">
+                        <div class="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Academy Rank</div>
+                        <div id="dash-academy-rank" class="text-3xl font-bold text-orange-500">Recruit</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOADING SCREEN -->
+        <div id="loading-screen" class="hidden text-center mt-20">
+            <div class="inline-block p-10 bg-white rounded-full shadow-2xl mb-6">
+                <div class="text-6xl animate-bounce">🧠</div>
+            </div>
+            <h2 id="loading-text" class="text-2xl font-bold text-indigo-800 italic">Designing Your Quest...</h2>
+            <div class="w-64 h-4 bg-gray-200 rounded-full mx-auto mt-6 overflow-hidden">
+                <div class="h-full bg-indigo-500 loading-shimmer w-full"></div>
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="game-screen" class="hidden">
+            <div class="bg-white rounded-3xl p-6 md:p-10 shadow-xl mt-6 border-b-8 border-gray-200">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <span id="question-category" class="bg-indigo-100 text-indigo-700 px-4 py-1 rounded-full text-xs font-bold uppercase mr-2"></span>
+                        <span id="rank-indicator" class="text-xs text-orange-500 font-bold uppercase tracking-widest">Rank 1</span>
+                    </div>
+                    <span class="text-gray-400 font-bold">Q <span id="q-number">1</span>/10</span>
+                </div>
+                <div class="w-full h-2 bg-gray-100 rounded-full mb-8">
+                    <div id="progress-bar" class="h-full bg-indigo-500 rounded-full progress-bar-fill w-0"></div>
+                </div>
+                <div id="question-content" class="mb-8">
+                    <h3 id="question-text" class="text-xl md:text-2xl text-gray-800 font-bold mb-6 leading-relaxed"></h3>
+                    
+                    <div id="visual-container" class="hidden flex flex-wrap justify-center items-center gap-4 mb-8 bg-blue-50 p-6 rounded-2xl border-2 border-dashed border-blue-200 nvr-svg-container">
+                        <!-- SVGs injected here -->
+                    </div>
+
+                    <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Buttons injected here -->
+                    </div>
+                </div>
+                <div id="feedback" class="hidden p-4 rounded-xl text-center font-bold text-lg mb-4"></div>
+                <div class="flex justify-between items-center mt-6">
+                    <button onclick="goHome()" class="text-gray-400 font-bold hover:text-gray-600 uppercase transition">Quit</button>
+                    <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-indigo-700 transition">NEXT QUESTION →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="hidden text-center mt-6">
+            <div class="bg-white rounded-3xl p-10 shadow-xl border-b-8 border-gray-200">
+                <h2 class="text-4xl text-indigo-800 mb-2" id="result-title">Quest Mastered!</h2>
+                <div id="final-emoji" class="text-7xl mb-4">🏆</div>
+                <p id="result-text" class="text-xl text-gray-600 mb-8"></p>
+                <div id="unlock-msg" class="hidden mb-8 p-4 bg-green-50 border-2 border-green-200 rounded-2xl text-green-700 font-bold">🚀 NEW RANK UNLOCKED: <span id="next-rank-name"></span></div>
+                <div class="flex flex-col md:flex-row gap-4 justify-center">
+                    <button onclick="goHome()" class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-indigo-700">BACK TO MENU</button>
+                    <button onclick="showReview()" class="bg-purple-500 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-purple-600">REVIEW ANSWERS 📚</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- REVIEW SCREEN -->
+        <div id="review-screen" class="hidden mt-8">
+            <h2 class="text-3xl text-indigo-900 mb-6 text-center uppercase tracking-tight">Review & Learn</h2>
+            <div id="review-list" class="space-y-6 mb-10"></div>
+            <div class="text-center">
+                <button onclick="goHome()" class="bg-indigo-600 text-white px-10 py-4 rounded-2xl font-bold shadow-lg hover:bg-indigo-700 transition active:scale-95">BACK TO ACADEMY</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // REPLACE WITH YOUR GEMINI API KEY
+        const geminiApiKey = "";
+
+        // FIREBASE CONFIG - Automatically detect environment or use custom
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyA3abJ4VoMvinj8nj4UVVoEbg0hg8MWsSE",
+            authDomain: "plus-66053.firebaseapp.com",
+            projectId: "plus-66053",
+            storageBucket: "plus-66053.firebasestorage.app",
+            messagingSenderId: "710073584985",
+            appId: "1:710073584985:web:82083938cc52f8df4ad048",
+            measurementId: "G-TCNSDY7672"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Use environment App ID or fallback
+        const appId = typeof __app_id !== 'undefined' ? __app_id : "plus-academy-11";
+
+        // Global State
+        let playerStats = {
+            totalScore: 0,
+            ranks: { "Verbal Reasoning": 1, "Non-Verbal Reasoning": 1, "Maths": 1 },
+            heroName: ""
+        };
+
+        const rankNames = ["Foundation", "Advanced", "Expert", "Scholarship", "Grandmaster"];
+
+        // Firebase Auth initialization
+        async function initAuth() {
+            try {
+                // If running in Canvas with an initial token, use it. Otherwise sign in anonymously.
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth failed", err);
+                if (err.code === 'auth/configuration-not-found') {
+                    // This error usually means the Anonymous auth provider isn't enabled in the user's project console
+                    document.getElementById('auth-error-msg').classList.remove('hidden');
+                }
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const statsDoc = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'stats');
+                onSnapshot(statsDoc, (snapshot) => {
+                    if (snapshot.exists()) {
+                        playerStats = { ...playerStats, ...snapshot.data() };
+                        updateStatsUI();
+                        if (playerStats.heroName) {
+                            showHomeScreen();
+                        }
+                    }
+                }, (error) => console.error("Snapshot error:", error));
+            }
+        });
+
+        async function saveStats() {
+            if (!auth.currentUser) return;
+            const statsDoc = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'profile', 'stats');
+            await setDoc(statsDoc, playerStats, { merge: true });
+        }
+
+        window.handleLogin = async function() {
+            const name = document.getElementById('username-input').value.trim();
+            if (!name) return;
+            
+            document.getElementById('login-btn').innerText = "Entering Academy...";
+            playerStats.heroName = name;
+            await saveStats();
+            showHomeScreen();
+        };
+
+        function showHomeScreen() {
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('app-header').classList.remove('hidden');
+            document.getElementById('home-screen').classList.remove('hidden');
+            document.getElementById('hero-name-display').innerText = playerStats.heroName;
+            updateStatsUI();
+        }
+
+        let currentQuestions = [];
+        let currentQIdx = 0;
+        let sessionScore = 0;
+        let sessionResults = [];
+        let currentSubject = "";
+
+        async function callGemini(prompt) {
+            const apiKeyToUse = geminiApiKey || ""; 
+            if (!apiKeyToUse) {
+                alert("Please add your Gemini API Key to the code to generate questions!");
+                return;
+            }
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKeyToUse}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                text: { type: "STRING" },
+                                visual_svgs: { type: "ARRAY", items: { type: "STRING" }, description: "Array of raw SVG strings for NVR sequences." },
+                                options: { 
+                                    type: "ARRAY", 
+                                    items: { 
+                                        type: "OBJECT", 
+                                        properties: { id: { type: "STRING" }, content: { type: "STRING" } } 
+                                    } 
+                                },
+                                correct_id: { type: "STRING" },
+                                explanation: { type: "STRING" }
+                            },
+                            required: ["text", "options", "correct_id", "explanation"]
+                        }
+                    }
+                }
+            };
+
+            let retries = 0;
+            while (retries < 5) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error('API Error');
+                    const data = await response.json();
+                    return JSON.parse(data.candidates[0].content.parts[0].text);
+                } catch (e) {
+                    retries++;
+                    await new Promise(r => setTimeout(r, Math.pow(2, retries) * 1000));
+                }
+            }
+            throw new Error("Failed to load questions.");
+        }
+
+        window.startQuest = async function(subject) {
+            currentSubject = subject;
+            const currentRank = playerStats.ranks[subject] || 1;
+            
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('loading-screen').classList.remove('hidden');
+            document.getElementById('loading-text').innerText = `Designing Level ${currentRank} ${subject} Quest...`;
+            
+            const difficultyInstruction = [
+                "Foundation: Simple synonyms, basic arithmetic, single-rule shape patterns.",
+                "Advanced: 5-6 letter hidden words, multi-step problems, 2-rule shapes.",
+                "Expert: Complex codes, ratios, 3D rotations.",
+                "Scholarship: Abstract logic, advanced algebra, matrices.",
+                "Grandmaster: Maximum difficulty, expert deduction."
+            ][Math.min(currentRank - 1, 4)];
+
+            let prompt = `Generate 10 unique 11+ questions for ${subject}. Difficulty: ${difficultyInstruction}. Ensure child-friendly Top Tip explanations.
+            IMPORTANT: For Verbal reasoning 'move a letter' puzzles (e.g. BEARD & LATE), ensure the answer is logically sound (e.g. moving R from BEARD to LATE makes BEAD and LATER).
+            Check all patterns carefully.`;
+            
+            if (subject === "Non-Verbal Reasoning") {
+                prompt += ` CRITICAL: For Non-Verbal questions, you MUST provide raw SVG strings in the 'visual_svgs' array and in the 'options[].content' fields.
+                - Sequence puzzles: Provide 3 SVGs in 'visual_svgs' showing a progression. The user must pick the 4th.
+                - SVGs should be clean, using stroke="black", fill="none", and 50x50 viewBox.`;
+            }
+
+            try {
+                currentQuestions = await callGemini(prompt);
+                if (!currentQuestions) return;
+                currentQIdx = 0;
+                sessionScore = 0;
+                sessionResults = [];
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('game-screen').classList.remove('hidden');
+                const qTotalElem = document.getElementById('q-total');
+                if (qTotalElem) qTotalElem.innerText = currentQuestions.length;
+                document.getElementById('rank-indicator').innerText = `Rank ${currentRank}: ${rankNames[Math.min(currentRank-1, 4)]}`;
+                updateProgressBar();
+                showQuestion();
+            } catch (error) {
+                console.error(error);
+                alert("The Brain Academy encountered an error. Please try again.");
+                goHome();
+            }
+        };
+
+        function showQuestion() {
+            const q = currentQuestions[currentQIdx];
+            document.getElementById('q-number').innerText = currentQIdx + 1;
+            document.getElementById('question-category').innerText = currentSubject;
+            document.getElementById('question-text').innerHTML = q.text;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            updateProgressBar();
+            
+            const visualContainer = document.getElementById('visual-container');
+            if (q.visual_svgs && q.visual_svgs.length > 0) {
+                visualContainer.classList.remove('hidden');
+                const cleanSvgs = q.visual_svgs.map(s => s.replace(/```svg|```/g, '').trim());
+                visualContainer.innerHTML = cleanSvgs.map(svg => `<div class="bg-white p-2 rounded border-2 border-indigo-100 shadow-sm">${svg}</div>`).join('<div class="text-xl font-bold text-indigo-300">⮕</div>');
+            } else {
+                visualContainer.classList.add('hidden');
+            }
+
+            const optionsGrid = document.getElementById('options-grid');
+            optionsGrid.innerHTML = '';
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white hover:bg-indigo-50 text-gray-800 font-bold py-5 px-6 rounded-3xl border-2 border-gray-100 hover:border-indigo-400 transition text-center shadow-sm card-hover min-h-[80px] flex flex-col items-center justify-center";
+                
+                const isSvg = opt.content && opt.content.trim().startsWith('<svg');
+                if (isSvg) {
+                    const cleanOptSvg = opt.content.replace(/```svg|```/g, '').trim();
+                    btn.innerHTML = `<div class="option-svg">${cleanOptSvg}</div><div class="mt-2 text-xs text-indigo-400 font-bold">${opt.id}</div>`;
+                } else {
+                    btn.innerText = opt.content;
+                }
+                
+                btn.onclick = () => checkAnswer(opt.id, btn);
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        window.checkAnswer = function(selectedId, btn) {
+            const q = currentQuestions[currentQIdx];
+            const feedback = document.getElementById('feedback');
+            const allButtons = document.querySelectorAll('#options-grid button');
+            allButtons.forEach(b => b.disabled = true);
+            
+            const isCorrect = selectedId === q.correct_id;
+            sessionResults.push({ question: q, selectedId, isCorrect });
+
+            if (isCorrect) {
+                sessionScore++;
+                playerStats.totalScore += 100;
+                btn.classList.replace('bg-white', 'bg-green-500');
+                btn.classList.add('text-white', 'correct-pulse', 'border-green-600');
+                feedback.innerHTML = "⭐ BRILLIANT! Correct Answer.";
+                feedback.className = "p-4 rounded-xl text-center font-bold text-lg mb-4 bg-green-100 text-green-700 block";
+            } else {
+                btn.classList.replace('bg-white', 'bg-red-500');
+                btn.classList.add('text-white', 'border-red-600');
+                feedback.innerHTML = `Nice try! The correct answer was: ${q.correct_id}`;
+                feedback.className = "p-4 rounded-xl text-center font-bold text-lg mb-4 bg-red-100 text-red-700 block";
+                
+                const correctIdx = q.options.findIndex(o => o.id === q.correct_id);
+                if (correctIdx !== -1) allButtons[correctIdx].classList.add('border-green-500', 'border-4', 'bg-green-50');
+            }
+            document.getElementById('next-btn').classList.remove('hidden');
+        };
+
+        window.nextQuestion = function() {
+            currentQIdx++;
+            if (currentQIdx < currentQuestions.length) showQuestion();
+            else finishQuest();
+        };
+
+        async function finishQuest() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            
+            const percentage = (sessionScore / currentQuestions.length) * 100;
+            document.getElementById('result-text').innerText = `You scored ${sessionScore} out of ${currentQuestions.length} (${percentage}%)`;
+            
+            const unlockMsg = document.getElementById('unlock-msg');
+            if (percentage >= 80 && playerStats.ranks[currentSubject] < 5) {
+                playerStats.ranks[currentSubject]++;
+                unlockMsg.classList.remove('hidden');
+                document.getElementById('next-rank-name').innerText = rankNames[playerStats.ranks[currentSubject]-1];
+                document.getElementById('final-emoji').innerText = "🔥";
+            } else {
+                unlockMsg.classList.add('hidden');
+                document.getElementById('final-emoji').innerText = percentage >= 50 ? "🥈" : "🥉";
+            }
+            await saveStats();
+        }
+
+        function updateStatsUI() {
+            document.getElementById('score').innerText = playerStats.totalScore;
+            document.getElementById('dash-total-score').innerText = playerStats.totalScore;
+            const avgRankNum = Math.round(Object.values(playerStats.ranks).reduce((a,b)=>a+b, 0) / 3);
+            document.getElementById('dash-academy-rank').innerText = rankNames[avgRankNum-1] || "Recruit";
+            document.getElementById('vr-rank-ui').innerText = `LVL ${playerStats.ranks["Verbal Reasoning"] || 1}`;
+            document.getElementById('nvr-rank-ui').innerText = `LVL ${playerStats.ranks["Non-Verbal Reasoning"] || 1}`;
+            document.getElementById('maths-rank-ui').innerText = `LVL ${playerStats.ranks["Maths"] || 1}`;
+        }
+
+        window.goHome = function() {
+            document.getElementById('home-screen').classList.remove('hidden');
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('review-screen').classList.add('hidden');
+            document.getElementById('loading-screen').classList.add('hidden');
+            updateStatsUI();
+        };
+
+        function updateProgressBar() {
+            const progress = (currentQIdx / currentQuestions.length) * 100;
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) progressBar.style.width = `${progress}%`;
+        }
+
+        window.showReview = function() {
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('review-screen').classList.remove('hidden');
+            const list = document.getElementById('review-list');
+            list.innerHTML = '';
+            sessionResults.forEach((res, i) => {
+                const item = document.createElement('div');
+                item.className = `bg-white p-6 rounded-3xl border-l-8 ${res.isCorrect ? 'border-green-400' : 'border-red-400'} shadow-md mb-4 text-left`;
+                item.innerHTML = `<div class="font-bold text-indigo-900 mb-2">Q${i+1} ${res.isCorrect ? '✅' : '❌'}</div><div class="text-gray-800 mb-3">${res.question.text}</div><div class="bg-indigo-50 p-4 rounded-xl text-blue-800 italic text-sm">${res.question.explanation}</div>`;
+                list.appendChild(item);
+            });
+        };
+
+        initAuth();
+    </script>
+</body>
+</html>
