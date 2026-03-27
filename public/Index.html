@@ -204,11 +204,10 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // API KEY SETUP: Reset to empty string to allow environment-provided key injection.
-        // NOTE: If you are deploying this externally, please restore your key "AIzaSyBTQGeIh5BHipjLCx-WMOxH6aZGJsdjTVs" manually before running firebase deploy.
-        const apiKey = "";
+        // RESTORED API KEY: This ensures the live site has "fuel" to generate questions.
+        const apiKey = "AIzaSyBTQGeIh5BHipjLCx-WMOxH6aZGJsdjTVs";
 
-        // FIREBASE CONFIG
+        // FIREBASE CONFIG - Prioritize environment config if available
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyA3abJ4VoMvinj8nj4UVVoEbg0hg8MWsSE",
             authDomain: "plus-66053.firebaseapp.com",
@@ -222,6 +221,8 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        
+        // App ID for data organization
         const appId = typeof __app_id !== 'undefined' ? __app_id : "plus-academy-11";
 
         let playerStats = {
@@ -235,6 +236,7 @@
 
         async function initAuth() {
             try {
+                // RULE 3: Auth BEFORE operations. Handle custom tokens from environment.
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
@@ -242,7 +244,7 @@
                 }
             } catch (err) {
                 console.error("Auth failed:", err);
-                if (err.code === 'auth/configuration-not-found') {
+                if (err.code === 'auth/configuration-not-found' || err.code === 'auth/operation-not-allowed') {
                     document.getElementById('auth-error-msg').classList.remove('hidden');
                 }
             }
@@ -250,6 +252,7 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                // RULE 1: Strict paths for private user data
                 const statsDoc = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'stats');
                 onSnapshot(statsDoc, (snapshot) => {
                     if (snapshot.exists()) {
@@ -337,8 +340,8 @@
         let currentSubject = "";
 
         async function callGemini(prompt) {
-            // Using the strictly supported model for this preview environment.
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            // Using gemini-1.5-flash which is standard for public API keys.
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
                 generationConfig: {
