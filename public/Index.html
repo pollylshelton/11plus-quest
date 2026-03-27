@@ -114,13 +114,12 @@
                     <p class="text-gray-600 mb-8 italic text-sm">Below is a breakdown of your child's mastery by puzzle type. Red bars indicate areas the AI will prioritize for more practice.</p>
                     
                     <div id="analytics-grid" class="space-y-6">
-                        <!-- Progress bars injected here -->
                         <div class="text-center text-gray-400 italic py-10">Complete a few quests to see detailed progress data!</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Global Stats (Visible in both) -->
+            <!-- Global Stats -->
             <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-orange-400">
                 <h3 class="text-2xl text-indigo-900 mb-6 flex items-center gap-2 font-title">
                     <span>📊</span> Academy Report
@@ -164,14 +163,8 @@
                 </div>
                 <div id="question-content" class="mb-8">
                     <h3 id="question-text" class="text-xl md:text-2xl text-gray-800 font-bold mb-6 leading-relaxed"></h3>
-                    
-                    <div id="visual-container" class="hidden flex flex-wrap justify-center items-center gap-4 mb-8 bg-blue-50 p-6 rounded-2xl border-2 border-dashed border-blue-200 nvr-svg-container">
-                        <!-- SVGs injected here -->
-                    </div>
-
-                    <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Buttons injected here -->
-                    </div>
+                    <div id="visual-container" class="hidden flex flex-wrap justify-center items-center gap-4 mb-8 bg-blue-50 p-6 rounded-2xl border-2 border-dashed border-blue-200 nvr-svg-container"></div>
+                    <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
                 <div id="feedback" class="hidden p-4 rounded-xl text-center font-bold text-lg mb-4"></div>
                 <div class="flex justify-between items-center mt-6">
@@ -211,8 +204,8 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // API KEY SETUP: Reset to empty string as per environment instructions. 
-        // Note: The execution environment provides the key at runtime when this is empty.
+        // API KEY SETUP: Reset to empty string to allow environment-provided key injection.
+        // NOTE: If you are deploying this externally, please restore your key "AIzaSyBTQGeIh5BHipjLCx-WMOxH6aZGJsdjTVs" manually before running firebase deploy.
         const apiKey = "";
 
         // FIREBASE CONFIG
@@ -229,10 +222,8 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
         const appId = typeof __app_id !== 'undefined' ? __app_id : "plus-academy-11";
 
-        // Global State
         let playerStats = {
             totalScore: 0,
             ranks: { "Verbal Reasoning": 1, "Non-Verbal Reasoning": 1, "Maths": 1 },
@@ -317,12 +308,10 @@
         function renderAnalytics() {
             const container = document.getElementById('analytics-grid');
             const perf = playerStats.performance || {};
-            
             if (Object.keys(perf).length === 0) {
                 container.innerHTML = '<div class="text-center text-gray-400 italic py-10">Complete a few quests to see detailed progress data!</div>';
                 return;
             }
-
             container.innerHTML = Object.entries(perf).map(([topic, data]) => {
                 const perc = Math.round((data.correct / data.total) * 100) || 0;
                 const colorClass = perc > 75 ? 'bg-green-500' : perc > 40 ? 'bg-orange-400' : 'bg-red-500';
@@ -350,7 +339,6 @@
         async function callGemini(prompt) {
             // Using the strictly supported model for this preview environment.
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
                 generationConfig: {
@@ -381,7 +369,6 @@
 
             let retries = 0;
             const delays = [1000, 2000, 4000, 8000, 16000];
-            
             while (retries < 5) {
                 try {
                     const response = await fetch(url, {
@@ -389,19 +376,12 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        throw new Error(`API ${response.status}: ${errorData?.error?.message || 'Unknown error'}`);
-                    }
-                    
+                    if (!response.ok) throw new Error(`API error: ${response.status}`);
                     const data = await response.json();
                     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!text) throw new Error("Empty response from model");
-                    
+                    if (!text) throw new Error("Empty response");
                     return JSON.parse(text);
                 } catch (e) {
-                    console.error(`Attempt ${retries + 1} failed:`, e.message);
                     retries++;
                     if (retries === 5) throw e;
                     await new Promise(r => setTimeout(r, delays[retries - 1]));
@@ -412,7 +392,6 @@
         window.startQuest = async function(subject) {
             currentSubject = subject;
             const currentRank = playerStats.ranks[subject] || 1;
-            
             const struggleTopics = Object.entries(playerStats.performance || {})
                 .filter(([_, data]) => (data.correct / data.total) < 0.6)
                 .map(([topic]) => topic)
@@ -440,8 +419,6 @@
 
             try {
                 currentQuestions = await callGemini(prompt);
-                if (!currentQuestions || currentQuestions.length === 0) throw new Error("No questions generated");
-                
                 currentQIdx = 0;
                 sessionScore = 0;
                 sessionResults = [];
@@ -451,7 +428,7 @@
                 showQuestion();
             } catch (error) {
                 console.error("Quest load error:", error);
-                alert("The Brain Academy encountered an error: " + error.message);
+                alert("The Brain Academy encountered an error. Please try again.");
                 goHome();
             }
         };
@@ -459,7 +436,6 @@
         function showQuestion() {
             const q = currentQuestions[currentQIdx];
             if (!q) return;
-            
             document.getElementById('q-number').innerText = currentQIdx + 1;
             document.getElementById('question-category').innerText = q.subcategory || currentSubject;
             document.getElementById('question-text').innerHTML = q.text;
@@ -470,22 +446,19 @@
             const visualContainer = document.getElementById('visual-container');
             if (q.visual_svgs && q.visual_svgs.length > 0) {
                 visualContainer.classList.remove('hidden');
-                visualContainer.innerHTML = q.visual_svgs.map(s => `<div class="bg-white p-2 rounded border-2 border-indigo-100 shadow-sm">${s.replace(/```svg|```/g, '')}</div>`).join('<div class="text-xl font-bold text-indigo-300">⮕</div>');
-            } else {
-                visualContainer.classList.add('hidden');
-            }
+                const cleanSvgs = q.visual_svgs.map(s => s.replace(/```svg|```/g, '').trim());
+                visualContainer.innerHTML = cleanSvgs.map(svg => `<div class="bg-white p-2 rounded border-2 border-indigo-100 shadow-sm">${svg}</div>`).join('<div class="text-xl font-bold text-indigo-300">⮕</div>');
+            } else visualContainer.classList.add('hidden');
 
             const optionsGrid = document.getElementById('options-grid');
             optionsGrid.innerHTML = '';
             (q.options || []).forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = "bg-white hover:bg-indigo-50 text-gray-800 font-bold py-5 px-6 rounded-3xl border-2 border-gray-100 hover:border-indigo-400 transition text-center shadow-sm card-hover min-h-[80px] flex flex-col items-center justify-center";
-                
                 if (opt.content && opt.content.includes('<svg')) {
-                    btn.innerHTML = `<div class="option-svg">${opt.content.replace(/```svg|```/g, '')}</div><div class="mt-2 text-xs text-indigo-400 font-bold">${opt.id}</div>`;
-                } else {
-                    btn.innerText = opt.content || '';
-                }
+                    const cleanOptSvg = opt.content.replace(/```svg|```/g, '').trim();
+                    btn.innerHTML = `<div class="option-svg">${cleanOptSvg}</div><div class="mt-2 text-xs text-indigo-400 font-bold">${opt.id}</div>`;
+                } else btn.innerText = opt.content || '';
                 btn.onclick = () => checkAnswer(opt.id, btn);
                 optionsGrid.appendChild(btn);
             });
@@ -496,17 +469,12 @@
             const feedback = document.getElementById('feedback');
             const allButtons = document.querySelectorAll('#options-grid button');
             allButtons.forEach(b => b.disabled = true);
-            
             const isCorrect = selectedId === q.correct_id;
             sessionResults.push({ question: q, selectedId, isCorrect });
-
             const sub = q.subcategory || 'General';
-            if (!playerStats.performance[sub]) {
-                playerStats.performance[sub] = { correct: 0, total: 0 };
-            }
+            if (!playerStats.performance[sub]) playerStats.performance[sub] = { correct: 0, total: 0 };
             playerStats.performance[sub].total++;
             if (isCorrect) playerStats.performance[sub].correct++;
-
             if (isCorrect) {
                 sessionScore++;
                 playerStats.totalScore += 100;
@@ -534,15 +502,12 @@
             document.getElementById('result-screen').classList.remove('hidden');
             const percentage = (sessionScore / (currentQuestions.length || 1)) * 100;
             document.getElementById('result-text').innerText = `You scored ${sessionScore} out of ${currentQuestions.length} (${Math.round(percentage)}%)`;
-            
             const unlockMsg = document.getElementById('unlock-msg');
             if (percentage >= 80 && playerStats.ranks[currentSubject] < 5) {
                 playerStats.ranks[currentSubject]++;
                 unlockMsg.classList.remove('hidden');
                 document.getElementById('next-rank-name').innerText = rankNames[playerStats.ranks[currentSubject]-1];
-            } else {
-                unlockMsg.classList.add('hidden');
-            }
+            } else unlockMsg.classList.add('hidden');
             await saveStats();
         }
 
@@ -576,7 +541,7 @@
             const list = document.getElementById('review-list');
             list.innerHTML = sessionResults.map((res, i) => `
                 <div class="bg-white p-6 rounded-3xl border-l-8 ${res.isCorrect ? 'border-green-400' : 'border-red-400'} shadow-md mb-4 text-left">
-                    <div class="font-bold text-indigo-900 mb-2">Q${i+1} [${res.question.subcategory}] ${res.isCorrect ? '✅' : '❌'}</div>
+                    <div class="font-bold text-indigo-900 mb-2">Q${i+1} [${res.question.subcategory || 'General'}] ${res.isCorrect ? '✅' : '❌'}</div>
                     <div class="text-gray-800 mb-3">${res.question.text}</div>
                     <div class="bg-indigo-50 p-4 rounded-xl text-blue-800 italic text-sm">${res.question.explanation}</div>
                 </div>
