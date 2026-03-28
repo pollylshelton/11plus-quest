@@ -17,12 +17,13 @@
             --bauhaus-green: #2A9D8F;
         }
 
-        /* Bauhaus Color Utilities */
+        /* Bauhaus Utility Classes - Guaranteed Visibility */
         .bg-bauhaus-red { background-color: #E63946 !important; }
         .bg-bauhaus-blue { background-color: #1D3557 !important; }
         .bg-bauhaus-yellow { background-color: #FFB703 !important; }
         .bg-bauhaus-green { background-color: #2A9D8F !important; }
         .bg-bauhaus-black { background-color: #000000 !important; }
+        .text-bauhaus-black { color: #000000 !important; }
 
         body { 
             font-family: 'Space Grotesk', sans-serif; 
@@ -141,18 +142,20 @@
                 <h1 onclick="goHome()" class="text-4xl md:text-6xl font-bold tracking-tighter cursor-pointer hover:text-bauhaus-red transition origin-left uppercase">
                     11+ Quest<span class="text-bauhaus-red">.</span>
                 </h1>
-                <p class="text-xs md:text-sm font-bold tracking-widest uppercase opacity-60">The Ultimate Brain Challenge</p>
+                <p class="text-xs md:text-sm font-bold tracking-widest uppercase opacity-60">Architectural Brain Academy</p>
             </div>
-            <div class="flex flex-col items-end gap-2 w-full md:w-auto text-black">
-                <div class="bg-bauhaus-black text-white px-4 md:px-6 py-2 text-sm md:text-lg font-bold tracking-tighter uppercase w-full text-center">
+            <div class="flex flex-col items-end gap-2 w-full md:w-auto">
+                <div class="bg-black text-white px-4 md:px-6 py-2 text-sm md:text-lg font-bold tracking-tighter uppercase w-full text-center relative group">
                     HERO: <span id="hero-name-display">---</span>
+                    <button onclick="handleLogout()" class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] bg-bauhaus-red text-white px-2 py-1 hidden group-hover:block border border-white cursor-pointer">LOGOUT</button>
                 </div>
                 <div class="flex gap-2 w-full">
-                    <div class="bg-bauhaus-white flex-grow px-3 py-2 text-[10px] md:text-xs font-bold border-4 border-black uppercase text-center text-black">
+                    <div style="background-color: white;" class="flex-grow px-3 py-2 text-[10px] md:text-xs font-bold border-4 border-black uppercase text-center text-black">
                         CORRECT: <span id="score" class="text-sm md:text-lg">0</span>
                     </div>
-                    <div class="bg-bauhaus-yellow flex-grow px-3 py-2 text-[10px] md:text-xs font-bold border-4 border-black text-black uppercase text-center">
-                        RANK: <span id="dash-academy-rank-top" class="text-sm md:text-lg">---</span>
+                    <!-- RANK DISPLAY: FIXED HIGH-CONTRAST COLORS -->
+                    <div style="background-color: #FFB703;" class="flex-grow px-3 py-2 text-[10px] md:text-xs font-bold border-4 border-black text-black uppercase text-center">
+                        RANK: <span id="dash-academy-rank-top" class="text-sm md:text-lg font-black text-black">---</span>
                     </div>
                 </div>
             </div>
@@ -165,7 +168,7 @@
         <div id="auth-screen" class="mt-8 md:mt-12 flex flex-col items-center">
             <div class="bauhaus-card p-6 md:p-12 max-w-xl w-full bg-pattern text-black">
                 <div class="bg-white p-6 md:p-10 border-4 border-black relative text-black">
-                    <div class="hidden md:block absolute -top-12 -left-12 w-24 h-24 bg-bauhaus-red rounded-full border-4 border-black text-black"></div>
+                    <div class="hidden md:block absolute -top-12 -left-12 w-24 h-24 bg-bauhaus-red rounded-full border-4 border-black text-black text-black text-black"></div>
                     <h1 class="fluid-heading font-bold tracking-tighter mb-4 uppercase text-black">11+<br>Puzzle quest</h1>
                     <p class="mb-10 font-bold uppercase tracking-tight text-lg md:text-xl opacity-80 text-black">Login to continue hero training</p>
                     <input type="text" id="username-input" placeholder="NAME" class="w-full p-4 md:p-6 border-4 md:border-8 border-black font-bold text-2xl md:text-3xl focus:outline-none focus:bg-yellow-50 mb-8 uppercase text-black">
@@ -173,7 +176,7 @@
                         Enter →
                     </button>
                     <div id="auth-error-msg" class="hidden mt-4 p-4 bg-bauhaus-red text-white font-bold border-2 border-black italic text-sm">
-                        Connection error. Refreshing logic...
+                        Establishing secure connection...
                     </div>
                 </div>
             </div>
@@ -181,13 +184,13 @@
 
         <!-- HUB -->
         <div id="home-screen" class="hidden">
-            <div class="flex flex-wrap justify-between items-center mb-8 md:mb-12 gap-4 md:gap-6 text-black">
+            <div class="flex flex-wrap justify-between items-center mb-8 md:mb-12 gap-4 md:gap-6 text-black text-black">
                 <div class="bg-black p-1 md:p-2 flex gap-1 md:gap-2 w-full md:w-auto">
                     <button id="view-student-btn" onclick="toggleView('student')" class="flex-grow px-6 md:px-10 py-3 md:py-4 text-xs md:text-base font-bold transition bg-bauhaus-cream text-black border-4 border-black uppercase">MY QUESTS</button>
-                    <button id="view-parent-btn" onclick="toggleView('parent')" class="flex-grow px-6 md:px-10 py-3 md:py-4 text-xs md:text-base font-bold transition text-white hover:bg-bauhaus-red uppercase">Parent Hub</button>
+                    <button id="view-parent-btn" onclick="toggleView('parent')" class="flex-grow px-6 md:px-10 py-3 md:py-4 text-xs md:text-base font-bold transition text-white hover:bg-bauhaus-red uppercase text-white">Parent Hub</button>
                 </div>
                 <div id="resume-banner" class="hidden bg-bauhaus-yellow p-3 md:p-4 border-4 md:border-8 border-black flex items-center gap-4 md:gap-6 animate-pulse w-full md:w-auto text-black">
-                    <span class="font-bold uppercase text-[10px] md:text-sm tracking-tighter">Paused Quest Found:</span>
+                    <span class="font-bold uppercase text-[10px] md:text-sm tracking-tighter text-black">Paused Quest Found:</span>
                     <button onclick="resumeQuest()" class="bg-black text-white px-4 md:px-8 py-2 font-bold text-[10px] md:text-sm hover:bg-white hover:text-black transition border-2 md:border-4 border-black uppercase">Resume <span id="resume-subject"></span></button>
                 </div>
             </div>
@@ -196,46 +199,46 @@
                 <!-- REWARD STATION -->
                 <div class="bauhaus-card p-6 md:p-10 bg-bauhaus-yellow mb-8 md:mb-12 border-black grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-black">
                     <div>
-                        <div class="text-[10px] font-bold uppercase tracking-[0.3em] mb-2 opacity-60">Quest Rewards</div>
-                        <h3 class="text-4xl md:text-5xl font-bold tracking-tighter uppercase leading-none mb-4">The Claim Station</h3>
-                        <p class="text-xs font-bold uppercase mb-6 opacity-80">Earn 50p per rank up! Once Mum hands you the coins, click below to clear your vault.</p>
+                        <div class="text-[10px] font-bold uppercase tracking-[0.3em] mb-2 opacity-60">Hero Rewards</div>
+                        <h3 class="text-4xl md:text-5xl font-bold tracking-tighter uppercase leading-none mb-4 text-black">The Claim Station</h3>
+                        <p class="text-xs font-bold uppercase mb-6 opacity-80 text-black">Earn 50p per level up! Once Mum hands you the coins, click below to empty your vault.</p>
                         <button id="claim-btn" onclick="claimRewards()" class="bauhaus-btn cta-primary px-8 py-4 text-sm disabled:opacity-30 disabled:cursor-not-allowed" disabled>
                             Claim From Mum
                         </button>
                     </div>
                     <div class="vault-display">
-                        <div class="text-[10px] uppercase font-bold mb-1 opacity-50 text-white">Pending Rewards</div>
-                        <div class="text-6xl md:text-7xl font-bold tracking-tighter" id="reward-display">£0.00</div>
-                        <div class="mt-4 pt-4 border-t border-white border-opacity-20">
-                            <div class="text-[10px] uppercase font-bold opacity-50 text-white">Lifetime Hero Earnings: <span id="lifetime-display" class="font-bold text-white opacity-100">£0.00</span></div>
+                        <div class="text-[10px] uppercase font-bold mb-1 opacity-50 text-white">Pending Cash</div>
+                        <div class="text-6xl md:text-7xl font-bold tracking-tighter text-bauhaus-yellow" id="reward-display">£0.00</div>
+                        <div class="mt-4 pt-4 border-t border-white border-opacity-20 text-white">
+                            <div class="text-[10px] uppercase font-bold opacity-50">Lifetime hero earnings: <span id="lifetime-display" class="font-bold opacity-100">£0.00</span></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 mb-12">
-                    <button onclick="startQuest('Verbal Reasoning')" class="bauhaus-card p-0 text-left group bg-white">
+                    <button onclick="startQuest('Verbal Reasoning')" class="bauhaus-card p-0 text-left group bg-white text-black">
                         <div class="h-40 md:h-48 bg-bauhaus-red border-b-4 md:border-b-8 border-black flex items-center justify-center p-6 group-hover:bg-black transition-colors duration-300">
-                            <svg class="w-20 h-20" viewBox="0 0 100 100"><circle cx="30" cy="50" r="20" fill="white" stroke="black" stroke-width="5"/><rect x="55" y="30" width="30" height="40" fill="var(--bauhaus-yellow)" stroke="black" stroke-width="5"/><path d="M50 10 L50 90" stroke="black" stroke-width="8"/></svg>
+                            <svg class="w-20 h-20" viewBox="0 0 100 100"><circle cx="30" cy="50" r="20" fill="white" stroke="black" stroke-width="5"/><rect x="55" y="30" width="30" height="40" fill="#FFB703" stroke="black" stroke-width="5"/><path d="M50 10 L50 90" stroke="black" stroke-width="8"/></svg>
                         </div>
                         <div class="p-6 md:p-8">
-                            <h3 class="text-2xl md:text-3xl font-bold tracking-tighter uppercase leading-none text-black">Verbal</h3>
+                            <h3 class="text-2xl md:text-3xl font-bold tracking-tighter uppercase leading-none">Verbal</h3>
                             <span id="vr-rank-ui" class="bg-bauhaus-black text-white text-[10px] px-2 py-1 font-bold tracking-tighter uppercase inline-block mt-2">LVL 1</span>
                         </div>
                     </button>
 
                     <button onclick="startQuest('Non-Verbal Reasoning')" class="bauhaus-card p-0 text-left group bg-white text-black">
-                        <div class="h-40 md:h-48 bg-bauhaus-blue border-b-4 md:border-b-8 border-black flex items-center justify-center p-6 group-hover:bg-black transition-colors duration-300 text-white">
-                            <svg class="w-20 h-20" viewBox="0 0 100 100"><path d="M10 90 L50 10 L90 90 Z" fill="var(--bauhaus-red)" stroke="white" stroke-width="5"/><circle cx="50" cy="65" r="15" fill="var(--bauhaus-yellow)" stroke="white" stroke-width="5"/></svg>
+                        <div class="h-40 md:h-48 bg-bauhaus-blue border-b-4 md:border-b-8 border-black flex items-center justify-center p-6 group-hover:bg-black transition-colors duration-300 text-white text-white">
+                            <svg class="w-20 h-20" viewBox="0 0 100 100"><path d="M10 90 L50 10 L90 90 Z" fill="#E63946" stroke="white" stroke-width="5"/><circle cx="50" cy="65" r="15" fill="#FFB703" stroke="white" stroke-width="5"/></svg>
                         </div>
                         <div class="p-6 md:p-8">
-                            <h3 class="text-2xl md:text-3xl font-bold tracking-tighter uppercase leading-none text-black">Patterns</h3>
+                            <h3 class="text-2xl md:text-3xl font-bold tracking-tighter uppercase leading-none">Patterns</h3>
                             <span id="nvr-rank-ui" class="bg-bauhaus-black text-white text-[10px] px-2 py-1 font-bold tracking-tighter uppercase inline-block mt-2">LVL 1</span>
                         </div>
                     </button>
 
                     <button onclick="startQuest('Maths')" class="bauhaus-card p-0 text-left group bg-white text-black text-black">
                         <div class="h-40 md:h-48 bg-bauhaus-green border-b-4 md:border-b-8 border-black flex items-center justify-center p-6 group-hover:bg-black transition-colors duration-300 text-white">
-                            <svg class="w-20 h-20" viewBox="0 0 100 100"><rect x="10" y="10" width="35" height="35" fill="var(--bauhaus-blue)" stroke="black" stroke-width="5"/><rect x="55" y="10" width="35" height="35" fill="var(--bauhaus-red)" stroke="black" stroke-width="5"/><rect x="10" y="55" width="80" height="35" fill="var(--bauhaus-yellow)" stroke="black" stroke-width="5"/></svg>
+                            <svg class="w-20 h-20" viewBox="0 0 100 100"><rect x="10" y="10" width="35" height="35" fill="#1D3557" stroke="black" stroke-width="5"/><rect x="55" y="10" width="35" height="35" fill="#E63946" stroke="black" stroke-width="5"/><rect x="10" y="55" width="80" height="35" fill="#FFB703" stroke="black" stroke-width="5"/></svg>
                         </div>
                         <div class="p-6 md:p-8">
                             <h3 class="text-2xl md:text-3xl font-bold tracking-tighter uppercase leading-none text-green-900">Maths</h3>
@@ -243,28 +246,28 @@
                         </div>
                     </button>
                 </div>
-                <div class="text-center font-bold text-xs uppercase opacity-40 mb-12 italic text-black">Healthy, Homemade Brain Fuel 🍏</div>
+                <div class="text-center font-bold text-xs uppercase opacity-40 mb-12 italic text-black">Fuelled by Healthy Homemade Academy Food 🍏</div>
             </div>
 
             <!-- Parent View -->
             <div id="parent-content" class="hidden text-black text-black">
-                <div class="bauhaus-card p-6 md:p-10 mb-12 bg-white border-black text-black">
-                    <h3 class="text-3xl md:text-5xl font-bold tracking-tighter mb-8 md:mb-12 uppercase border-b-4 border-black pb-4 text-black text-black">Mastery Dashboard</h3>
+                <div class="bauhaus-card p-6 md:p-10 mb-12 bg-white border-black text-black text-black">
+                    <h3 class="text-3xl md:text-5xl font-bold tracking-tighter mb-8 md:mb-12 uppercase border-b-4 border-black pb-4 text-black text-black">Mission Dashboard</h3>
                     <div id="analytics-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 text-black text-black"></div>
                 </div>
             </div>
 
             <!-- Lifetime Stats -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 text-white text-white">
-                <div class="bg-black text-white p-6 md:p-10 border-4 border-black relative overflow-hidden">
+                <div class="bg-black text-white p-6 md:p-10 border-4 border-black relative overflow-hidden text-white">
                     <div class="absolute -right-8 -bottom-8 w-24 md:w-32 h-24 md:h-32 bg-bauhaus-blue rounded-full"></div>
                     <div class="text-[10px] md:text-xs uppercase font-bold tracking-[0.4em] mb-4 opacity-50 text-white">Questions Solved</div>
                     <div id="dash-total-score" class="text-6xl md:text-8xl font-bold tracking-tighter text-white">0</div>
                 </div>
-                <div class="bg-bauhaus-red text-white p-6 md:p-10 border-4 border-black relative overflow-hidden text-white">
-                    <div class="absolute -right-8 -bottom-8 w-24 md:w-32 h-24 md:h-32 bg-bauhaus-yellow opacity-40 text-white text-white text-white"></div>
+                <div class="bg-bauhaus-red text-white p-6 md:p-10 border-4 border-black relative overflow-hidden text-white text-white">
+                    <div class="absolute -right-8 -bottom-8 w-24 md:w-32 h-24 md:h-32 bg-bauhaus-yellow opacity-40 text-white text-white text-white text-white"></div>
                     <div class="text-[10px] md:text-xs uppercase font-bold tracking-[0.4em] mb-4 opacity-50 text-white text-white text-white">Hero Level</div>
-                    <div id="dash-academy-rank" class="text-4xl md:text-6xl font-bold tracking-tighter uppercase leading-tight text-white">---</div>
+                    <div id="dash-academy-rank" class="text-4xl md:text-6xl font-bold tracking-tighter uppercase leading-tight text-white text-white">---</div>
                 </div>
             </div>
         </div>
@@ -276,40 +279,40 @@
             </div>
             <h2 id="loading-text" class="text-3xl md:text-5xl font-bold tracking-tighter uppercase italic text-black">Synthesizing Quest...</h2>
             <div class="w-full max-w-md h-8 md:h-12 border-4 md:border-8 border-black mx-auto mt-12 overflow-hidden bg-white text-black">
-                <div class="h-full bg-bauhaus-blue loading-shimmer w-full"></div>
+                <div class="h-full bg-bauhaus-blue loading-shimmer w-full text-black"></div>
             </div>
         </div>
 
-        <!-- GAME INTERFACE -->
+        <!-- GAME -->
         <div id="game-screen" class="hidden text-black text-black">
             <div class="bauhaus-card p-4 md:p-16 relative text-black text-black">
                 <div class="flex flex-wrap justify-between items-end mb-8 md:mb-12 gap-4 border-b-4 border-black pb-6 text-black text-black">
-                    <div class="flex flex-col gap-2">
+                    <div class="flex flex-col gap-2 text-black">
                         <span id="question-category" class="bg-black text-white px-4 md:px-6 py-2 text-[10px] md:text-sm font-bold uppercase tracking-tighter text-white"></span>
-                        <div class="font-bold text-xl md:text-3xl tracking-tighter uppercase text-black text-black">Progress <span id="q-number">1</span>/10</div>
+                        <div class="font-bold text-xl md:text-3xl tracking-tighter uppercase text-black text-black">Unit Progress <span id="q-number">1</span>/10</div>
                     </div>
-                    <div id="quest-clock" class="bg-black text-white px-6 py-4 border-4 border-bauhaus-red font-bold text-3xl tracking-tighter tabular-nums">
+                    <div id="quest-clock" class="bg-black text-white px-6 py-4 border-4 border-bauhaus-red font-bold text-3xl tracking-tighter tabular-nums text-white">
                         05:00
                     </div>
                 </div>
 
                 <div class="w-full h-4 md:h-8 border-4 md:border-8 border-black mb-12 md:mb-16 bg-white text-black">
-                    <div id="progress-bar" class="h-full bg-bauhaus-red progress-bar-fill w-0"></div>
+                    <div id="progress-bar" class="h-full bg-bauhaus-red progress-bar-fill w-0 text-black"></div>
                 </div>
 
-                <div id="question-content" class="mb-12 md:mb-16">
-                    <div id="question-text" class="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-8 md:mb-12 tracking-tighter border-l-4 md:border-l-8 border-bauhaus-red pl-4 md:pl-8 text-black text-black"></div>
-                    <div id="visual-container" class="hidden flex flex-wrap justify-center items-center gap-6 md:gap-10 mb-12 md:mb-16 p-6 md:p-12 border-4 md:border-8 border-black bg-white"></div>
+                <div id="question-content" class="mb-12 md:mb-16 text-black">
+                    <div id="question-text" class="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-8 md:mb-12 tracking-tighter border-l-4 md:border-l-8 border-bauhaus-red pl-4 md:pl-8 text-black text-black text-black"></div>
+                    <div id="visual-container" class="hidden flex flex-wrap justify-center items-center gap-6 md:gap-10 mb-12 md:mb-16 p-6 md:p-12 border-4 md:border-8 border-black bg-white text-black"></div>
                     <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 text-black text-black"></div>
                 </div>
 
-                <div id="feedback" class="feedback-box"></div>
+                <div id="feedback" class="feedback-box text-black text-black"></div>
                 
-                <div class="flex flex-wrap justify-between items-center gap-4 mt-8 md:mt-12 pt-8 md:pt-12 border-t-4 md:border-t-8 border-black text-black text-black">
+                <div class="flex flex-wrap justify-between items-center gap-4 mt-8 md:mt-12 pt-8 md:pt-12 border-t-4 md:border-t-8 border-black text-black text-black text-black">
                     <button onclick="pauseAndExit()" class="bg-white text-bauhaus-red font-bold uppercase text-[10px] md:text-lg tracking-tighter border-2 md:border-4 border-bauhaus-red px-6 md:px-10 py-3 md:py-4 bauhaus-btn transition">PAUSE & EXIT</button>
-                    <div id="action-buttons" class="flex gap-4 text-white">
-                        <button id="submit-btn" onclick="checkAnswerSubmission()" class="hidden bg-bauhaus-blue text-white px-8 md:px-12 py-4 md:py-6 font-bold text-xl md:text-3xl bauhaus-btn cta-primary transition uppercase">Check Answer</button>
-                        <button id="next-btn" onclick="nextQuestion()" class="hidden bg-bauhaus-blue text-white px-8 md:px-12 py-4 md:py-6 font-bold text-xl md:text-3xl bauhaus-btn cta-primary transition uppercase">GO →</button>
+                    <div class="flex gap-4">
+                        <button id="submit-btn" onclick="checkAnswerSubmission()" class="hidden bg-bauhaus-blue text-white px-8 md:px-12 py-4 md:py-6 font-bold text-xl md:text-3xl bauhaus-btn cta-primary transition uppercase text-white">Check Answer</button>
+                        <button id="next-btn" onclick="nextQuestion()" class="hidden bg-bauhaus-blue text-white px-8 md:px-12 py-4 md:py-6 font-bold text-xl md:text-3xl bauhaus-btn cta-primary transition uppercase text-white">GO →</button>
                     </div>
                 </div>
             </div>
@@ -318,16 +321,16 @@
         <!-- RESULTS -->
         <div id="result-screen" class="hidden text-center mt-6 text-black text-black">
             <div class="bauhaus-card p-8 md:p-16 bg-pattern border-black text-black text-black">
-                <div class="bg-white p-6 md:p-12 border-4 md:border-8 border-black text-black text-black text-black">
+                <div class="bg-white p-6 md:p-12 border-4 md:border-8 border-black text-black text-black">
                     <h2 class="fluid-heading font-bold tracking-tighter mb-4 uppercase text-black text-black" id="result-title">Quest Mastered!</h2>
-                    <p id="result-text" class="text-2xl md:text-4xl font-bold tracking-tighter mb-4 text-bauhaus-blue uppercase underline decoration-4 md:decoration-8 decoration-bauhaus-yellow text-black text-black"></p>
-                    <div id="result-time" class="text-xl font-bold uppercase opacity-60 mb-8 text-black">Completed in 00:00</div>
-                    <div id="unlock-msg" class="hidden mb-8 md:mb-12 p-6 md:p-8 bg-bauhaus-yellow border-4 md:border-8 border-black text-black font-bold text-xl md:text-3xl uppercase animate-bounce text-black">
+                    <p id="result-text" class="text-2xl md:text-4xl font-bold tracking-tighter mb-4 text-bauhaus-blue uppercase underline decoration-4 md:decoration-8 decoration-bauhaus-yellow text-black text-black text-black"></p>
+                    <div id="result-time" class="text-xl font-bold uppercase opacity-60 mb-8 text-black text-black">Time taken: 00:00</div>
+                    <div id="unlock-msg" class="hidden mb-8 md:mb-12 p-6 md:p-8 bg-bauhaus-yellow border-4 md:border-8 border-black text-black font-bold text-xl md:text-3xl uppercase animate-bounce text-black text-black">
                         RANK UP! +50p ADDED TO VAULT
                     </div>
                     <div class="flex flex-col md:flex-row gap-4 md:gap-8 justify-center text-black">
-                        <button onclick="goHome()" class="bg-black text-white px-8 md:px-12 py-4 md:py-6 font-bold text-lg md:text-2xl bauhaus-btn cta-primary transition uppercase">Hub</button>
-                        <button id="review-btn" onclick="showReview()" class="bg-bauhaus-red text-white px-8 md:px-12 py-4 md:py-6 font-bold text-lg md:text-2xl bauhaus-btn cta-secondary transition uppercase">See Answers</button>
+                        <button onclick="goHome()" class="bg-black text-white px-8 md:px-12 py-4 md:py-6 font-bold text-lg md:text-2xl bauhaus-btn cta-primary transition uppercase text-white">Academy Hub</button>
+                        <button id="review-btn" onclick="showReview()" class="bg-bauhaus-red text-white px-8 md:px-12 py-4 md:py-6 font-bold text-lg md:text-2xl bauhaus-btn cta-secondary transition uppercase text-white">See Answers</button>
                     </div>
                 </div>
             </div>
@@ -335,19 +338,19 @@
 
         <!-- REVIEW -->
         <div id="review-screen" class="hidden mt-8 text-black text-black">
-            <h2 class="text-4xl md:text-7xl font-bold tracking-tighter mb-12 md:mb-16 uppercase border-b-4 md:border-b-8 border-black pb-4 text-black text-black">Mission History</h2>
+            <h2 class="text-4xl md:text-7xl font-bold tracking-tighter mb-12 md:mb-16 uppercase border-b-4 md:border-b-8 border-black pb-4 text-black text-black text-black text-black">Mission Review</h2>
             <div id="review-list" class="space-y-8 md:space-y-12 mb-16 text-black text-black text-black"></div>
-            <button onclick="goHome()" class="bg-black text-white px-10 md:px-16 py-6 md:py-8 font-bold text-2xl md:text-3xl bauhaus-btn cta-primary transition uppercase text-white">Close Files</button>
+            <button onclick="goHome()" class="bg-black text-white px-10 md:px-16 py-6 md:py-8 font-bold text-2xl md:text-3xl bauhaus-btn cta-primary transition uppercase text-white text-white text-white">Close Files</button>
         </div>
 
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // GEMINI API KEY RESTORED FOR LOCAL/LIVE FILE
+        // GEMINI API KEY RESTORED FOR LIVE USE
         const apiKey = "AIzaSyBTQGeIh5BHipjLCx-WMOxH6aZGJsdjTVs"; 
 
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
@@ -394,15 +397,6 @@
             }
         }
 
-        async function initAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    try { await signInWithCustomToken(auth, __initial_auth_token); } 
-                    catch (e) { await signInAnonymously(auth); }
-                } else { await signInAnonymously(auth); }
-            } catch (err) { console.error("Auth System Initialization Failure:", err); }
-        }
-
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 const statsDoc = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'stats');
@@ -411,8 +405,13 @@
                         playerStats = { ...playerStats, ...snapshot.data() };
                         updateStatsUI();
                         if (playerStats.heroName) showHomeScreen();
+                        else showAuthScreen();
+                    } else {
+                        showAuthScreen();
                     }
-                });
+                }, (err) => console.error("Cloud Error:", err));
+            } else {
+                showAuthScreen();
             }
         });
 
@@ -421,6 +420,12 @@
             const statsDoc = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'profile', 'stats');
             await setDoc(statsDoc, playerStats, { merge: true });
         }
+
+        window.handleLogout = async function() {
+            await signOut(auth);
+            playerStats.heroName = "";
+            location.reload();
+        };
 
         window.claimRewards = async function() {
             if (playerStats.rewardBalance > 0) {
@@ -434,24 +439,25 @@
         window.handleLogin = async function() {
             const name = document.getElementById('username-input').value.trim();
             if (!name) return;
-            
             const btn = document.getElementById('login-btn');
-            btn.innerText = "AUTHENTICATING...";
+            btn.innerText = "VALIDATING...";
             btn.disabled = true;
-
             try {
-                if (!auth.currentUser) {
-                    await signInAnonymously(auth);
-                }
+                if (!auth.currentUser) await signInAnonymously(auth);
                 playerStats.heroName = name;
                 await saveStats();
                 showHomeScreen();
             } catch (e) {
-                btn.innerText = "RETRY";
-                btn.disabled = false;
+                btn.innerText = "RETRY"; btn.disabled = false;
                 document.getElementById('auth-error-msg').classList.remove('hidden');
             }
         };
+
+        function showAuthScreen() {
+            document.getElementById('auth-screen').classList.remove('hidden');
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('app-header').classList.add('hidden');
+        }
 
         function showHomeScreen() {
             document.getElementById('auth-screen').classList.add('hidden');
@@ -464,60 +470,26 @@
 
         function updateStatsUI() {
             document.getElementById('score').innerText = playerStats.totalScore;
-            document.getElementById('dash-total-score').innerText = playerStats.totalScore;
-            
             const bal = playerStats.rewardBalance || 0;
             document.getElementById('reward-display').innerText = `£${bal.toFixed(2)}`;
             document.getElementById('lifetime-display').innerText = `£${(playerStats.totalEarned || 0).toFixed(2)}`;
-            
             const claimBtn = document.getElementById('claim-btn');
-            if (bal > 0) {
-                claimBtn.disabled = false;
-                claimBtn.classList.add('cta-success');
-                claimBtn.innerText = "Claim From Mum ✅";
-            } else {
-                claimBtn.disabled = true;
-                claimBtn.classList.remove('cta-success');
-                claimBtn.innerText = "Vault Secured";
-            }
+            claimBtn.disabled = bal <= 0;
+            claimBtn.classList.toggle('cta-success', bal > 0);
             
             const ranks = Object.values(playerStats.ranks);
             const avgRankNum = Math.round(ranks.reduce((a,b)=>a+b, 0) / 3);
             const rankLabel = rankNames[avgRankNum-1] || "Beginner";
-            document.getElementById('dash-academy-rank').innerText = rankLabel;
-            const trd = document.getElementById('dash-academy-rank-top');
-            if (trd) trd.innerText = rankLabel;
+            document.getElementById('dash-academy-rank-top').innerText = rankLabel;
             document.getElementById('vr-rank-ui').innerText = `LVL ${playerStats.ranks["Verbal Reasoning"] || 1}`;
             document.getElementById('nvr-rank-ui').innerText = `LVL ${playerStats.ranks["Non-Verbal Reasoning"] || 1}`;
             document.getElementById('maths-rank-ui').innerText = `LVL ${playerStats.ranks["Maths"] || 1}`;
         }
 
-        window.resumeQuest = function() {
-            if (!playerStats.activeQuest) return;
-            currentQuestions = playerStats.activeQuest.questions;
-            currentQIdx = playerStats.activeQuest.currentIdx;
-            sessionScore = playerStats.activeQuest.sessionScore;
-            sessionResults = playerStats.activeQuest.sessionResults;
-            currentSubject = playerStats.activeQuest.subject;
-            elapsedSeconds = playerStats.activeQuest.elapsed || 0;
-            document.getElementById('home-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            startTimer();
-            showQuestion();
-        }
-
-        window.pauseAndExit = async function() {
-            stopTimer();
-            playerStats.activeQuest = { subject: currentSubject, currentIdx: currentQIdx, questions: currentQuestions, sessionScore: sessionScore, sessionResults: sessionResults, elapsed: elapsedSeconds };
-            await saveStats();
-            goHome();
-        }
-
-        let currentQuestions = [], currentQIdx = 0, sessionScore = 0, sessionResults = [], currentSubject = "", selectedId = null;
-
         async function fetchGeminiWithRetry(prompt) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const sysPrompt = "You are an 11+ Quest Synthesizer. Output JSON array format only. Logic types: Analogies (A to B, so C to ?), Matrices (2x2 grid missing one), and Series.";
+            // Stable 1.5 Flash for production reliability
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const sysPrompt = "You are an 11+ Quest Synthesizer. Output JSON array format ONLY. Focus on high-quality visual sequences for NVR (Analogies, Matrices, Series).";
             for (let i = 0; i < 5; i++) {
                 try {
                     const response = await fetch(url, {
@@ -531,15 +503,17 @@
                     });
                     if (response.ok) {
                         const data = await response.json();
-                        const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || "[]";
-                        // Defensive JSON cleaning
-                        const cleanJson = textOutput.substring(textOutput.indexOf('['), textOutput.lastIndexOf(']') + 1);
-                        return cleanJson;
+                        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "[]";
+                        // Robust JSON extraction logic
+                        const start = text.indexOf('[');
+                        const end = text.lastIndexOf(']') + 1;
+                        if (start === -1) throw new Error("Format error");
+                        return text.substring(start, end);
                     }
                 } catch (e) {}
                 await new Promise(res => setTimeout(res, 1000 * Math.pow(2, i)));
             }
-            throw new Error("API Connection Failure");
+            throw new Error("Synthesizer Timeout");
         }
 
         window.startQuest = async function(subject) {
@@ -551,24 +525,22 @@
             document.getElementById('loading-screen').classList.remove('hidden');
             
             const r = playerStats.ranks[subject] || 1;
-            const prompt = `Generate 10 unique 11+ questions for ${subject}. Difficulty Level: ${r}. 
+            const prompt = `Generate 10 complex 11+ questions for ${subject}. Difficulty Level: ${r}. 
             NVR RULES:
-            1. Use "Analogy" (Shape A to B, so C to ?) or "Matrix".
-            2. text field MUST ONLY be "Which shape completes the analogy?" or "Which shape completes the matrix?".
-            3. visual_svgs MUST be an array of 2 or 3 unique raw SVG strings (50x50, stroke="black", fill="none" or primary colors).
+            1. Logic: Analogies (Shape A to B, so C to ?) or Matrices.
+            2. text field MUST ONLY be "Which shape completes the analogy?".
+            3. visual_svgs MUST be an array of 2 or 3 unique raw SVG strings (50x50, stroke="black").
             4. options MUST be an array of exactly 4 unique multiple choice SVG strings.
-            5. Escape internal quotes with backslashes.`;
+            5. Escape internal quotes with backslashes. Output valid JSON array only.`;
             
             try {
-                const jsonOutput = await fetchGeminiWithRetry(prompt);
-                currentQuestions = JSON.parse(jsonOutput);
-                
+                const json = await fetchGeminiWithRetry(prompt);
+                currentQuestions = JSON.parse(json);
                 currentQIdx = 0; sessionScore = 0; sessionResults = []; elapsedSeconds = 0;
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('game-screen').classList.remove('hidden');
-                startTimer();
-                showQuestion();
-            } catch (e) { alert("Synthesizer error. Please refresh and try again."); goHome(); }
+                startTimer(); showQuestion();
+            } catch (e) { alert("Synthesizer logic error. Please try again."); goHome(); }
         }
 
         function startTimer() {
@@ -576,20 +548,13 @@
             timerInterval = setInterval(() => {
                 elapsedSeconds++;
                 const remaining = Math.max(0, 300 - elapsedSeconds);
-                const mins = Math.floor(remaining / 60);
-                const secs = remaining % 60;
                 const clock = document.getElementById('quest-clock');
-                
                 if (remaining === 0) {
                     const overSecs = elapsedSeconds - 300;
-                    const oMins = Math.floor(overSecs / 60);
-                    const oSecs = overSecs % 60;
-                    clock.innerText = `+${String(oMins).padStart(2, '0')}:${String(oSecs).padStart(2, '0')}`;
+                    clock.innerText = `+${Math.floor(overSecs/60).toString().padStart(2,'0')}:${(overSecs%60).toString().padStart(2,'0')}`;
                     clock.className = "timer-danger px-6 py-4 border-4 border-black font-bold text-3xl tabular-nums";
                 } else {
-                    clock.innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-                    if (remaining <= 60) clock.className = "timer-warning px-6 py-4 border-4 border-black font-bold text-3xl tabular-nums";
-                    else clock.className = "bg-black text-white px-6 py-4 border-4 border-bauhaus-red font-bold text-3xl tabular-nums text-white";
+                    clock.innerText = `${Math.floor(remaining/60).toString().padStart(2,'0')}:${(remaining%60).toString().padStart(2,'0')}`;
                 }
             }, 1000);
         }
@@ -598,28 +563,21 @@
 
         function showQuestion() {
             const q = currentQuestions[currentQIdx];
-            if (!q) { goHome(); return; }
             selectedId = null;
             document.getElementById('q-number').innerText = currentQIdx + 1;
             document.getElementById('question-category').innerText = q.subcategory || currentSubject;
             document.getElementById('question-text').innerHTML = q.text;
-            
-            const feedback = document.getElementById('feedback');
-            feedback.classList.remove('active', 'bg-bauhaus-green', 'bg-bauhaus-red', 'text-white');
-            feedback.innerHTML = "";
-            
+            const fb = document.getElementById('feedback');
+            fb.classList.remove('active', 'bg-bauhaus-green', 'bg-bauhaus-red');
+            fb.innerHTML = "";
             document.getElementById('submit-btn').classList.add('hidden');
             document.getElementById('next-btn').classList.add('hidden');
-            document.getElementById('progress-bar').style.width = `${(currentQIdx / currentQuestions.length) * 100}%`;
+            document.getElementById('progress-bar').style.width = `${(currentQIdx / 10) * 100}%`;
             
             const vc = document.getElementById('visual-container');
             if (q.visual_svgs && q.visual_svgs.length > 0) {
                 vc.classList.remove('hidden');
-                vc.innerHTML = q.visual_svgs.map((s, i) => {
-                    const wrap = `<div class="nvr-svg-wrapper text-black">${s.replace(/\\"/g, '"')}</div>`;
-                    if (i < q.visual_svgs.length - 1) return wrap + `<div class="text-3xl font-bold px-2 text-black">→</div>`;
-                    return wrap;
-                }).join('');
+                vc.innerHTML = q.visual_svgs.map((s, i) => `<div class="nvr-svg-wrapper text-black">${s.replace(/\\"/g, '"')}</div>`).join('<div class="text-3xl font-bold px-2 text-black">→</div>');
             } else vc.classList.add('hidden');
 
             const grid = document.getElementById('options-grid');
@@ -628,7 +586,7 @@
                 const btn = document.createElement('button');
                 btn.className = "bauhaus-btn option-grid-btn text-black";
                 const content = opt.content.replace(/\\"/g, '"');
-                btn.innerHTML = content.includes('<svg') ? `<div class="option-svg">${content}</div>` : `<span class="font-bold uppercase text-black">${content}</span>`;
+                btn.innerHTML = content.includes('<svg') ? `<div class="option-svg">${content}</div>` : `<span class="font-bold uppercase text-black text-black text-black">${content}</span>`;
                 btn.onclick = () => {
                     if (document.getElementById('next-btn').classList.contains('hidden')) {
                         selectedId = opt.id;
@@ -643,51 +601,35 @@
 
         window.checkAnswerSubmission = function() {
             const q = currentQuestions[currentQIdx];
-            const feedback = document.getElementById('feedback');
+            const fb = document.getElementById('feedback');
             const btns = document.querySelectorAll('.option-grid-btn');
             document.getElementById('submit-btn').classList.add('hidden');
             const isCorrect = selectedId === q.correct_id;
             sessionResults.push({ question: q, isCorrect });
-            
-            feedback.classList.add('active');
+            fb.classList.add('active');
             if (isCorrect) {
-                playSound('success');
-                sessionScore++; playerStats.totalScore++;
+                playSound('success'); sessionScore++; playerStats.totalScore++;
                 btns.forEach(b => { if (b.classList.contains('option-selected')) b.classList.add('option-correct'); });
-                feedback.innerHTML = "SYSTEM MESSAGE: ACCURATE RESPONSE";
-                feedback.classList.add('bg-bauhaus-green');
+                fb.innerHTML = "SYSTEM: ACCURATE RESPONSE"; fb.classList.add('bg-bauhaus-green');
             } else {
                 playSound('error');
-                btns.forEach(b => { 
-                    if (b.classList.contains('option-selected')) b.classList.add('option-wrong');
-                    if (b.innerHTML.includes(q.options.find(o => o.id === q.correct_id).content.replace(/\\"/g, '"'))) b.classList.add('option-correct');
-                });
-                feedback.innerHTML = `CORRECTION: ANSWER WAS ${q.correct_id}. ${q.explanation}`;
-                feedback.classList.add('bg-bauhaus-red', 'text-white');
+                btns.forEach(b => { if (b.classList.contains('option-selected')) b.classList.add('option-wrong'); });
+                fb.innerHTML = `CORRECTION: ANSWER WAS ${q.correct_id}. ${q.explanation}`;
+                fb.classList.add('bg-bauhaus-red', 'text-white');
             }
             document.getElementById('next-btn').classList.remove('hidden');
         }
 
-        window.nextQuestion = () => { currentQIdx++; if (currentQIdx < currentQuestions.length) showQuestion(); else finishQuest(); }
+        window.nextQuestion = () => { currentQIdx++; if (currentQIdx < 10) showQuestion(); else finishQuest(); }
 
         async function finishQuest() {
-            stopTimer();
-            playerStats.activeQuest = null;
+            stopTimer(); playerStats.activeQuest = null;
             document.getElementById('game-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
-            const perc = (sessionScore / currentQuestions.length) * 100;
             document.getElementById('result-text').innerText = `${sessionScore}/10 CORRECT`;
-            const min = Math.floor(elapsedSeconds / 60);
-            const sec = elapsedSeconds % 60;
-            document.getElementById('result-time').innerText = `Completed in ${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-            
-            const topic = currentSubject || 'General';
-            if (!playerStats.performance[topic]) playerStats.performance[topic] = { correct: 0, total: 0, time: 0 };
-            playerStats.performance[topic].correct += sessionScore;
-            playerStats.performance[topic].total += 10;
-            playerStats.performance[topic].time += elapsedSeconds;
-
-            if (perc >= 80 && playerStats.ranks[currentSubject] < 5) {
+            const m = Math.floor(elapsedSeconds/60), s = elapsedSeconds%60;
+            document.getElementById('result-time').innerText = `Time: ${m}:${s.toString().padStart(2,'0')}`;
+            if (sessionScore >= 8 && playerStats.ranks[currentSubject] < 5) {
                 playerStats.ranks[currentSubject]++;
                 playerStats.rewardBalance = (playerStats.rewardBalance || 0) + 0.50;
                 document.getElementById('unlock-msg').classList.remove('hidden');
@@ -695,33 +637,13 @@
             await saveStats();
         }
 
-        window.goHome = () => {
-            stopTimer();
-            document.getElementById('home-screen').classList.remove('hidden');
-            ['game-screen', 'result-screen', 'review-screen', 'loading-screen'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            updateStatsUI();
-            checkResumeBanner();
-        }
-
-        function checkResumeBanner() {
-            const banner = document.getElementById('resume-banner');
-            banner.classList.toggle('hidden', !playerStats.activeQuest);
-            if (playerStats.activeQuest) document.getElementById('resume-subject').innerText = playerStats.activeQuest.subject;
-        }
-
-        window.toggleView = (view) => {
-            document.getElementById('student-content').classList.toggle('hidden', view !== 'student');
-            document.getElementById('parent-content').classList.toggle('hidden', view !== 'parent');
-            if (view === 'parent') renderAnalytics();
-        }
+        window.goHome = () => { stopTimer(); document.getElementById('home-screen').classList.remove('hidden'); ['game-screen', 'result-screen', 'review-screen', 'loading-screen'].forEach(id => document.getElementById(id).classList.add('hidden')); updateStatsUI(); }
+        window.toggleView = (view) => { document.getElementById('student-content').classList.toggle('hidden', view !== 'student'); document.getElementById('parent-content').classList.toggle('hidden', view !== 'parent'); if (view === 'parent') renderAnalytics(); }
 
         function renderAnalytics() {
             const container = document.getElementById('analytics-grid');
             const perf = playerStats.performance || {};
-            if (Object.keys(perf).length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center py-12 font-bold opacity-30 uppercase">DATA REQUIRED FOR ANALYTICS.</div>';
-                return;
-            }
+            if (Object.keys(perf).length === 0) { container.innerHTML = '<div class="col-span-full text-center py-12 font-bold opacity-30 uppercase">DATA REQUIRED FOR ANALYTICS.</div>'; return; }
             container.innerHTML = Object.entries(perf).map(([topic, data]) => {
                 const perc = Math.round((data.correct / data.total) * 100);
                 return `<div class="border-4 border-black p-6 bg-white relative overflow-hidden text-black"><div class="flex justify-between items-end font-bold uppercase mb-4"><span>${topic}</span><span class="text-3xl">${perc}%</span></div><div class="w-full h-8 border-4 border-black bg-white overflow-hidden text-black"><div class="h-full bg-bauhaus-blue" style="width: ${perc}%"></div></div></div>`;
@@ -732,13 +654,10 @@
             document.getElementById('result-screen').classList.add('hidden');
             document.getElementById('review-screen').classList.remove('hidden');
             document.getElementById('review-list').innerHTML = sessionResults.map((r, i) => `
-                <div class="border-4 border-black p-6 bg-white relative text-black">
-                    <div class="bg-black text-white px-4 py-1 font-bold absolute -top-4 -left-4 uppercase tracking-tighter text-white">Record #${i+1}</div>
-                    <div class="text-xl md:text-2xl font-bold mb-6 mt-4 leading-tight text-black text-black text-black text-black">${r.question.text}</div>
-                    <div class="bg-bauhaus-cream border-l-4 border-bauhaus-blue p-6 md:p-8 italic text-lg md:text-xl font-medium text-bauhaus-blue text-black text-black">
-                        <span class="block text-xs uppercase font-bold tracking-[0.2em] mb-2 opacity-50 text-bauhaus-blue text-black">TOP TIP:</span>
-                        ${r.question.explanation}
-                    </div>
+                <div class="border-4 border-black p-6 bg-white relative text-black text-black">
+                    <div class="bg-black text-white px-4 py-1 font-bold absolute -top-4 -left-4 uppercase tracking-tighter">MISSION RECORD #${i+1}</div>
+                    <div class="text-xl md:text-2xl font-bold mb-6 mt-4 leading-tight">${r.question.text}</div>
+                    <div class="bg-bauhaus-cream border-l-4 border-bauhaus-blue p-6 italic font-medium">TOP TIP: ${r.question.explanation}</div>
                 </div>`).join('');
         }
 
